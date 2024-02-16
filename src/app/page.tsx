@@ -1,11 +1,12 @@
 import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
-
+import { parse } from "node-html-parser";
 import { CreatePost } from "~/app/_components/create-post";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { Tiktoken, TiktokenBPE } from "js-tiktoken";
 import claude from "../claude.json";
+import { env } from "~/env";
 
 export default async function Home() {
   noStore();
@@ -27,7 +28,39 @@ export default async function Home() {
 
   const get = await fetch("https://tonyjara.com/blog");
   const text = await get.text();
-  console.log(countTokens(text));
+
+  function minimizeHTML(html: string, tagsToRemove: string[]) {
+    const doc = parse(html);
+
+    //List all tags in a document
+    // const tagSet = new Set();
+    // doc.querySelectorAll("*").forEach((element) => {
+    //   tagSet.add(element.tagName);
+    // });
+    // const list = Array.from(tagSet);
+
+    tagsToRemove.forEach((tagToRemove) => {
+      const elementsToRemove = doc.querySelectorAll(tagToRemove);
+      elementsToRemove.forEach((element) => {
+        element.remove();
+      });
+    });
+
+    return doc.outerHTML;
+  }
+
+  const html = minimizeHTML(text, [
+    "head",
+    "script",
+    "footer",
+    "style",
+    "meta",
+    "svg",
+    "path",
+    "nav",
+  ]);
+
+  console.log(countTokens(html));
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
@@ -50,27 +83,27 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* <CrudShowcase /> */}
+        <CrudShowcase html={html} />
       </div>
     </main>
   );
 }
 
-async function CrudShowcase() {
+async function CrudShowcase({ html }: { html: string }) {
   const session = await getServerAuthSession();
   if (!session?.user) return null;
 
-  const latestPost = await api.post.getLatest.query();
+  // const latestPost = await api.post.getLatest.query();
 
   return (
     <div className="w-full max-w-xs">
-      {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
+      {/* {latestPost ? ( */}
+      {/*   <p className="truncate">Your most recent post: {latestPost.name}</p> */}
+      {/* ) : ( */}
+      {/*   <p>You have no posts yet.</p> */}
+      {/* )} */}
 
-      <CreatePost />
+      <CreatePost html={html} />
     </div>
   );
 }
