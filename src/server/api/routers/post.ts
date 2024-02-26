@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { env } from "~/env";
 
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
-} from "~/server/api/trpc";
-import { posts } from "~/server/db/schema";
+} from "@/server/api/trpc";
+import { posts } from "@/server/db/schema";
+import { env } from "@/env.mjs";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -94,7 +94,6 @@ export const postRouter = createTRPCRouter({
 
       const req = await fetch(url, options);
       const json = (await req.json()) as togetherResponse;
-      console.log(json.usage);
 
       return json.choices[0]?.message.content;
     }),
