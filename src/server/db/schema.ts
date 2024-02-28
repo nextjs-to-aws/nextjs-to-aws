@@ -2,7 +2,7 @@ import { relations, sql } from "drizzle-orm";
 import {
   index,
   integer,
-  pgTableCreator,
+  pgTable as createTable,
   primaryKey,
   serial,
   text,
@@ -17,7 +17,7 @@ import { type AdapterAccount } from "@auth/core/adapters";
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `nextjs-to-aws_${name}`);
+// export const createTable = pgTableCreator((name) => `nextjs-to-aws_${name}`);
 
 export const posts = createTable(
   "post",
@@ -50,6 +50,7 @@ export const users = createTable("user", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
+  subscriptions: many(subscriptions),
 }));
 
 export const accounts = createTable(
@@ -114,3 +115,25 @@ export const verificationTokens = createTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   }),
 );
+
+export const subscriptions = createTable(
+  "subscription",
+  {
+    id: serial("id").primaryKey(),
+    url: varchar("url", { length: 256 }).notNull(),
+    name: varchar("name", { length: 256 }).notNull(),
+    description: varchar("description", { length: 256 }),
+    userId: varchar("userId", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (subscription) => ({
+    userIdIdx: index("subscription_userId_idx").on(subscription.userId),
+  }),
+);
+
+export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
+  user: one(users, { fields: [subscriptions.userId], references: [users.id] }),
+}));

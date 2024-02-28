@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { EmptyPlaceholder } from "@/components/empty-placeholder";
 import { DashboardHeader } from "@/components/header";
-import { PostCreateButton } from "@/components/post-create-button";
+import { SubscriptionCreateButton } from "@/app/home/_components/subscription-create-button";
 import { PostItem } from "@/components/post-item";
 import { DashboardShell } from "@/components/shell";
 import { useSession } from "next-auth/react";
@@ -39,7 +39,7 @@ export default async function DashboardPage() {
   return (
     <DashboardShell>
       <DashboardHeader heading="Posts" text="Create and manage posts.">
-        <PostCreateButton />
+        <SubscriptionCreateButton />
       </DashboardHeader>
       <div>
         {posts?.length ? (
@@ -51,11 +51,13 @@ export default async function DashboardPage() {
         ) : (
           <EmptyPlaceholder>
             <EmptyPlaceholder.Icon name="post" />
-            <EmptyPlaceholder.Title>No posts created</EmptyPlaceholder.Title>
+            <EmptyPlaceholder.Title>
+              No susbcriptions created
+            </EmptyPlaceholder.Title>
             <EmptyPlaceholder.Description>
-              You don&apos;t have any posts yet. Start creating content.
+              You don&apos;t have any subscriptions yet. Start subscribing.
             </EmptyPlaceholder.Description>
-            <PostCreateButton variant="outline" />
+            <SubscriptionCreateButton variant="outline" />
           </EmptyPlaceholder>
         )}
       </div>

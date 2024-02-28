@@ -4,6 +4,7 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
+  Coffee,
   Command,
   CreditCard,
   File,
@@ -15,6 +16,7 @@ import {
   LucideIcon,
   LucideProps,
   Mail,
+  Mailbox,
   Menu,
   Moon,
   MoreVertical,
@@ -33,8 +35,10 @@ import {
 export type Icon = LucideIcon;
 
 export const Icons = {
+  coffee: Coffee,
   logo: Command,
   close: X,
+  mailbox: Mailbox,
   spinner: Loader2,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
