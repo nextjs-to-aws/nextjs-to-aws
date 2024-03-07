@@ -36,8 +36,7 @@ import { auth } from "@/server/auth";
 
 export default async function IndexPage() {
   // const saession = await getServerAuthSession();
-  const session = await auth();
-  console.log(session);
+  // const session = await auth();
 
   return (
     <>

@@ -41,8 +41,6 @@ export const {
 // export const authOptions: NextAuthOptions = {
 //   callbacks: {
 //     session: ({ session, user }) => {
-//       // console.log(session);
-//       // console.log(user);
 //
 //       return {
 //         ...session,

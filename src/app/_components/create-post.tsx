@@ -1,9 +1,8 @@
 "use client";
 
+import { trpc } from "@/trpc/trpcClient";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
-import { api } from "@/trpc/react";
 
 export function CreatePost({ html }: { html: string }) {
   const router = useRouter();
@@ -19,7 +18,7 @@ export function CreatePost({ html }: { html: string }) {
   //   },
   // });
 
-  const { mutate: togetherTest, isLoading } = api.post.togetherAi.useMutation({
+  const { mutate: togetherTest, isLoading } = trpc.post.togetherAi.useMutation({
     onSuccess: (x) => {
       setMessage(x ?? "");
       // router.refresh();

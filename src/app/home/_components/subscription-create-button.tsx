@@ -55,27 +55,30 @@ export function SubscriptionCreateButton({
     router.refresh();
 
     router.push(`/editor/${post.id}`);
+    // router.push(`/editor/`);
   }
 
   return (
-    <button
-      onClick={onClick}
-      className={cn(
-        buttonVariants({ variant }),
-        {
-          "cursor-not-allowed opacity-60": isLoading,
-        },
-        className,
-      )}
-      disabled={isLoading}
-      {...props}
-    >
-      {isLoading ? (
-        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-      ) : (
-        <Icons.add className="mr-2 h-4 w-4" />
-      )}
-      New post
-    </button>
+    <>
+      <button
+        onClick={onClick}
+        className={cn(
+          buttonVariants({ variant }),
+          {
+            "cursor-not-allowed opacity-60": isLoading,
+          },
+          className,
+        )}
+        disabled={isLoading}
+        {...props}
+      >
+        {isLoading ? (
+          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <Icons.add className="mr-2 h-4 w-4" />
+        )}
+        New subscription
+      </button>
+    </>
   );
 }

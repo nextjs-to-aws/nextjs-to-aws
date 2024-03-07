@@ -7,7 +7,8 @@ import { absoluteUrl, cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Viewport } from "next";
+import { type Viewport } from "next";
+import { TRPCReactProvider } from "@/trpc/TrpcClientProviders";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -79,7 +80,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <TRPCReactProvider>{children}</TRPCReactProvider>
           <Toaster />
           <TailwindIndicator />
         </ThemeProvider>

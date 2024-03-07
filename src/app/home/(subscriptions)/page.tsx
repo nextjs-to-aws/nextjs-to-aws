@@ -6,21 +6,20 @@ import { SubscriptionCreateButton } from "@/app/home/_components/subscription-cr
 import { PostItem } from "@/components/post-item";
 import { DashboardShell } from "@/components/shell";
 import { useSession } from "next-auth/react";
-import { db } from "@/server/db";
 import { getCurrentUser } from "@/lib/session";
+import { db } from "@/server/db";
+import { SubscriptionCreateDialog } from "../_components/subscription-create-dialog";
 
 export const metadata = {
   title: "Dashboard",
 };
 
 export default async function DashboardPage() {
-  // const user = await getCurrentUser();
-  //
-  // if (!user) {
-  //   redirect(authOptions?.pages?.signIn || "/login");
-  // }
+  const user = await getCurrentUser();
+  const subs = await db.query.subscriptions.findMany({});
 
-  // const posts = await db.post.findMany({
+  // const subs = await db.
+  //       subscriptinos.findMany({
   //   where: {
   //     authorId: user.id,
   //   },
@@ -34,18 +33,18 @@ export default async function DashboardPage() {
   //     updatedAt: "desc",
   //   },
   // });
-  const posts: any = [];
+  // const posts: any = [];
 
   return (
     <DashboardShell>
       <DashboardHeader heading="Posts" text="Create and manage posts.">
-        <SubscriptionCreateButton />
+        <SubscriptionCreateDialog />
       </DashboardHeader>
       <div>
-        {posts?.length ? (
+        {subs?.length ? (
           <div className="divide-y divide-border rounded-md border">
-            {posts.map((post: any) => (
-              <PostItem key={post.id} post={post} />
+            {subs.map((sub) => (
+              <PostItem key={sub.id} post={sub} />
             ))}
           </div>
         ) : (
@@ -57,7 +56,7 @@ export default async function DashboardPage() {
             <EmptyPlaceholder.Description>
               You don&apos;t have any subscriptions yet. Start subscribing.
             </EmptyPlaceholder.Description>
-            <SubscriptionCreateButton variant="outline" />
+            <SubscriptionCreateDialog variant="outline" />
           </EmptyPlaceholder>
         )}
       </div>
